@@ -1,9 +1,13 @@
 [package]
 name = "cl"
 version = "0.1.0"
-authors = ["Marc Addeo <marcaddeo@gmail.com>"]
+description = "A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md."
+authors = ["Marc Addeo <hi@marc.cx>"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+derive_builder = "0.7.2"
+failure = "0.1.5"
+clap = { version = "2.33.0", features = ["yaml", "suggestions", "color"] }
+fstrings = "0.1.4"
+clparse = { version = "0.1.0", git = "https://github.com/marcaddeo/clparse" }

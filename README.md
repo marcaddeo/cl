@@ -50,6 +50,7 @@ When running `cl` without a subcommand, all unreleased changes will be
 displayed. This can be formatted as Markdown, JSON, or YAML.
 
 ```markdown
+$ cl
 ## [Unreleased]
 ### Added
 - Added a new feature to the website
@@ -63,6 +64,7 @@ displayed. This can be formatted as Markdown, JSON, or YAML.
 
 And as YAML:
 ```yaml
+$ cl -f yaml
 ---
 - added: Added a new feature to the website
 - security: Fixed a security flaw in the main authentication service

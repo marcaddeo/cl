@@ -9,6 +9,8 @@ use scan_dir::ScanDir;
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::prelude::*;
 use std::path::PathBuf;
+use std::process::Command;
+use std::env;
 
 #[derive(Debug, Clone, Fail)]
 enum ClError {
@@ -22,6 +24,7 @@ fn main() -> Result<(), Error> {
     let matches = app_from_crate!()
         .setting(AppSettings::VersionlessSubcommands)
         .setting(AppSettings::DisableHelpSubcommand)
+        .setting(AppSettings::DeriveDisplayOrder)
         .global_setting(AppSettings::ColoredHelp)
         .arg(
             Arg::with_name("format")
@@ -109,6 +112,10 @@ fn main() -> Result<(), Error> {
                         .multiple(true)
                 )
         )
+        .subcommand(
+            SubCommand::with_name("edit")
+                .about("Opens the change file for direct editing")
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -136,6 +143,21 @@ fn main() -> Result<(), Error> {
                 }
                 _ => unreachable!(),
             }
+
+            Ok(())
+        }
+        ("edit", Some(_)) => {
+            let cl_path = get_cl_path()?.into_os_string();
+            let cl_path = cl_path.to_str().unwrap();
+            let options = (env::var("VISUAL").ok(), env::var("EDITOR").ok());
+
+            let editor = match options {
+                (Some(visual), _) => visual,
+                (_, Some(editor)) => editor,
+                _ => panic!("Neither $VISUAL nor $EDITOR were set"),
+            };
+
+            Command::new(editor).arg(cl_path).spawn()?.wait()?;
 
             Ok(())
         }

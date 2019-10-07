@@ -1,26 +1,33 @@
+use anyhow::Result;
 use clap::{
     app_from_crate, crate_authors, crate_description, crate_name, crate_version, AppSettings, Arg,
     SubCommand,
 };
 use clparse::changelog::{Change, ReleaseBuilder};
-use failure::{Error, Fail};
+use err_derive::Error;
 use fstrings::*;
 use scan_dir::ScanDir;
+use std::env;
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::prelude::*;
 use std::path::PathBuf;
 use std::process::Command;
-use std::env;
 
-#[derive(Debug, Clone, Fail)]
+#[derive(Debug, Error)]
 enum ClError {
-    #[fail(display = "could not determine HEAD")]
+    #[error(
+        display = "there was an error when attempting to scan the .cl directory for change files"
+    )]
+    ScanError(#[error(source)] Vec<scan_dir::Error>),
+    #[error(display = "could not determine determine the repository root. are you in a git repo?")]
+    RepositoryError(#[error(source)] git2::Error),
+    #[error(display = "could not build release for output: {}", _0)]
+    ErrorBuildingRelease(String),
+    #[error(display = "could not determine the repository HEAD")]
     CouldNotDetermineHead,
-    #[fail(display = "could not write to changelog: {}", _0)]
-    CouldNotWriteChangelog(String),
 }
 
-fn main() -> Result<(), Error> {
+fn main() -> Result<()> {
     let matches = app_from_crate!()
         .setting(AppSettings::VersionlessSubcommands)
         .setting(AppSettings::DisableHelpSubcommand)
@@ -124,6 +131,8 @@ fn main() -> Result<(), Error> {
             match matches.value_of("format").unwrap() {
                 "json" => {
                     println!("{}", serde_json::to_string_pretty(&changes)?);
+
+                    Ok(())
                 }
                 "yaml" | "yml" => {
                     let mut output = serde_yaml::to_string(&changes)?;
@@ -131,20 +140,25 @@ fn main() -> Result<(), Error> {
                         output = output.replace("---\n", "");
                     }
                     println!("{}", output.to_string().trim_end());
+
+                    Ok(())
                 }
                 "markdown" | "md" => {
-                    let release = ReleaseBuilder::default().changes(changes).build().unwrap();
+                    let release = ReleaseBuilder::default()
+                        .changes(changes)
+                        .build()
+                        .map_err(ClError::ErrorBuildingRelease)?;
 
                     let mut output = f!("{release}");
                     if matches.is_present("no-headings") {
                         output = output.replace("## [Unreleased]\n", "");
                     }
                     println!("{}", output.to_string().trim_end());
+
+                    Ok(())
                 }
                 _ => unreachable!(),
             }
-
-            Ok(())
         }
         ("edit", Some(_)) => {
             let cl_path = get_cl_path()?.into_os_string();
@@ -168,37 +182,34 @@ fn main() -> Result<(), Error> {
                 .collect::<Vec<_>>()
                 .join(" ");
 
-            add_change(Change::new(kind, description.to_string())?)
+            add_change(Change::new(kind, description.to_string()).unwrap())?;
+
+            Ok(())
         }
         _ => Ok(()),
     }
 }
 
-fn add_change(change: Change) -> Result<(), Error> {
+fn add_change(change: Change) -> Result<()> {
     let cl_path = get_cl_path()?;
     let mut changes = get_changes(cl_path.clone())?;
     changes.push(change);
 
     let contents = f!("{}\n", serde_yaml::to_string(&changes)?);
-    match std::fs::write(cl_path.clone(), contents) {
-        Ok(_) => Ok(()),
-        Err(_) => {
-            let cl_path = cl_path.into_os_string().into_string().unwrap();
+    std::fs::write(cl_path.clone(), contents)?;
 
-            Err(ClError::CouldNotWriteChangelog(cl_path).into())
-        }
-    }
+    Ok(())
 }
 
-fn get_cl_dir() -> Result<PathBuf, Error> {
-    let repo = git2::Repository::discover(".")?;
+fn get_cl_dir() -> Result<PathBuf> {
+    let repo = git2::Repository::discover(".").map_err(ClError::RepositoryError)?;
     let cl_path = PathBuf::from(repo.path()).with_file_name(".cl");
 
     Ok(cl_path)
 }
 
-fn get_cl_path() -> Result<PathBuf, Error> {
-    let repo = git2::Repository::discover(".")?;
+fn get_cl_path() -> Result<PathBuf> {
+    let repo = git2::Repository::discover(".").map_err(ClError::RepositoryError)?;
     let head = repo.head()?;
     let head = head.shorthand().ok_or(ClError::CouldNotDetermineHead)?;
     let mut cl_path = get_cl_dir()?;
@@ -210,7 +221,7 @@ fn get_cl_path() -> Result<PathBuf, Error> {
     Ok(cl_path)
 }
 
-fn get_changes(cl_path: PathBuf) -> Result<Vec<Change>, Error> {
+fn get_changes(cl_path: PathBuf) -> Result<Vec<Change>> {
     let mut contents = String::new();
     let mut file = OpenOptions::new()
         .create(true)
@@ -226,7 +237,7 @@ fn get_changes(cl_path: PathBuf) -> Result<Vec<Change>, Error> {
     }
 }
 
-fn get_all_changes() -> Result<Vec<Change>, Error> {
+fn get_all_changes() -> Result<Vec<Change>> {
     let mut changes: Vec<Change> = Vec::new();
     let mut logs: Vec<PathBuf> = Vec::new();
     let cl_dir = get_cl_dir()?;
@@ -242,7 +253,7 @@ fn get_all_changes() -> Result<Vec<Change>, Error> {
                 }
             }
         })
-        .unwrap();
+        .map_err(ClError::ScanError)?;
 
     for log in logs {
         let mut cl_changes = get_changes(log)?;

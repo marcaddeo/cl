@@ -24,7 +24,7 @@ _More installation methods coming soon_
 
 ## Usage
 ```
-cl 0.2.0
+cl 0.3.0
 Marc Addeo <hi@marc.cx>
 A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md
 

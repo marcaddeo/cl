@@ -14,13 +14,17 @@ way and avoid unnecessary merge conflicts.
 $ brew install marcaddeo/clsuite/cl
 ```
 
+## Debian
+```
+$ curl -LO https://github.com/marcaddeo/cl/releases/download/0.3.0/cl_0.3.0_amd64.deb
+$ sudo dpkg -i cl_0.3.0_amd64.deb
+```
+
 ### Cargo
 
 ```
 $ cargo install --git https://github.com/marcaddeo/cl
 ```
-
-_More installation methods coming soon_
 
 ## Usage
 ```

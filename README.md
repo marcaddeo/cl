@@ -8,6 +8,14 @@ the branch name. This will allow developers to log their changes in an atomic
 way and avoid unnecessary merge conflicts.
 
 ## Installation
+
+### Homebrew
+```
+$ brew install marcaddeo/clsuite/cl
+```
+
+### Cargo
+
 ```
 $ cargo install --git https://github.com/marcaddeo/cl
 ```
@@ -16,7 +24,7 @@ _More installation methods coming soon_
 
 ## Usage
 ```
-cl 0.1.0
+cl 0.2.0
 Marc Addeo <hi@marc.cx>
 A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md
 

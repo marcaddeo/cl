@@ -9,7 +9,7 @@ edition = "2018"
 derive_builder = "0.8.0"
 clap = { version = "2.33.0", features = ["yaml", "suggestions", "color"] }
 fstrings = "0.1.4"
-clparse = { version = "0.1.0", git = "https://github.com/marcaddeo/clparse", tag = "0.1.0" }
+clparse = { version = "0.2.0", git = "https://github.com/marcaddeo/clparse", tag = "0.2.0" }
 scan_dir = "0.3.3"
 git2 = "0.10.1"
 serde = "1.0.101"

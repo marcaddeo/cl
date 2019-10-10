@@ -5,7 +5,6 @@ use clap::{
 };
 use clparse::changelog::{Change, ReleaseBuilder};
 use err_derive::Error;
-use fstrings::*;
 use scan_dir::ScanDir;
 use std::env;
 use std::fs::{create_dir_all, OpenOptions};
@@ -149,7 +148,7 @@ fn main() -> Result<()> {
                         .build()
                         .map_err(ClError::ErrorBuildingRelease)?;
 
-                    let mut output = f!("{release}");
+                    let mut output = format!("{}", release);
                     if matches.is_present("no-headings") {
                         output = output.replace("## [Unreleased]\n", "");
                     }
@@ -195,7 +194,7 @@ fn add_change(change: Change) -> Result<()> {
     let mut changes = get_changes(cl_path.clone())?;
     changes.push(change);
 
-    let contents = f!("{}\n", serde_yaml::to_string(&changes)?);
+    let contents = format!("{}\n", serde_yaml::to_string(&changes)?);
     std::fs::write(cl_path.clone(), contents)?;
 
     Ok(())

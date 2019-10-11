@@ -8,6 +8,7 @@ use err_derive::Error;
 use scan_dir::ScanDir;
 use std::env;
 use std::fs::{create_dir_all, OpenOptions};
+use std::io::{self, Write};
 use std::io::prelude::*;
 use std::path::PathBuf;
 use std::process::Command;
@@ -127,20 +128,16 @@ fn main() -> Result<()> {
     match matches.subcommand() {
         ("", None) => {
             let changes = get_all_changes()?;
-            match matches.value_of("format").unwrap() {
+            let output = match matches.value_of("format").unwrap() {
                 "json" => {
-                    println!("{}", serde_json::to_string_pretty(&changes)?);
-
-                    Ok(())
+                    format!("{}", serde_json::to_string_pretty(&changes)?)
                 }
                 "yaml" | "yml" => {
                     let mut output = serde_yaml::to_string(&changes)?;
                     if matches.is_present("no-headings") {
                         output = output.replace("---\n", "");
                     }
-                    println!("{}", output.to_string().trim_end());
-
-                    Ok(())
+                    format!("{}", output.to_string().trim_end())
                 }
                 "markdown" | "md" => {
                     let release = ReleaseBuilder::default()
@@ -152,12 +149,13 @@ fn main() -> Result<()> {
                     if matches.is_present("no-headings") {
                         output = output.replace("## [Unreleased]\n", "");
                     }
-                    println!("{}", output.to_string().trim_end());
-
-                    Ok(())
+                    format!("{}", output.to_string().trim_end())
                 }
                 _ => unreachable!(),
-            }
+            };
+
+            io::stdout().write_all(output.as_bytes())?;
+            Ok(())
         }
         ("edit", Some(_)) => {
             let cl_path = get_cl_path()?.into_os_string();

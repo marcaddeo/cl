@@ -197,6 +197,12 @@ fn add_change(change: Change) -> Result<()> {
     let contents = format!("{}\n", serde_yaml::to_string(&changes)?);
     std::fs::write(cl_path.clone(), contents)?;
 
+    let repo = git2::Repository::discover(".").map_err(ClError::RepositoryError)?;
+    let cl_path_relative = cl_path.strip_prefix(repo.path().parent().unwrap())?;
+    let mut index = repo.index()?;
+    index.add_path(&cl_path_relative)?;
+    index.write()?;
+
     Ok(())
 }
 

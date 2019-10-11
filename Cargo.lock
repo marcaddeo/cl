@@ -64,7 +64,7 @@ version = "0.4.0"
 dependencies = [
  "anyhow 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "clparse 0.3.0 (git+https://github.com/marcaddeo/clparse?tag=0.3.0)",
+ "clparse 0.4.0 (git+https://github.com/marcaddeo/clparse?tag=0.4.0)",
  "derive_builder 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "err-derive 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "git2 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -91,8 +91,8 @@ dependencies = [
 
 [[package]]
 name = "clparse"
-version = "0.3.0"
-source = "git+https://github.com/marcaddeo/clparse?tag=0.3.0#b32e60c6b25a5103ce506fb434980f3d7362a9ea"
+version = "0.4.0"
+source = "git+https://github.com/marcaddeo/clparse?tag=0.4.0#c1abba35f4715c195e9ee9ffe210b6b8513b4b47"
 dependencies = [
  "anyhow 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -748,7 +748,7 @@ dependencies = [
 "checksum cfg-if 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)" = "4785bdd1c96b2a846b2bd7cc02e86b6b3dbf14e7e53446c4f54c92a361040822"
 "checksum chrono 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)" = "e8493056968583b0193c1bb04d6f7684586f3726992d6c573261941a895dbd68"
 "checksum clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)" = "5067f5bb2d80ef5d68b4c87db81601f0b75bca627bc2ef76b141d7b846a3c6d9"
-"checksum clparse 0.3.0 (git+https://github.com/marcaddeo/clparse?tag=0.3.0)" = "<none>"
+"checksum clparse 0.4.0 (git+https://github.com/marcaddeo/clparse?tag=0.4.0)" = "<none>"
 "checksum darling 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)" = "3fe629a532efad5526454efb0700f86d5ad7ff001acb37e431c8bf017a432a8e"
 "checksum darling 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fcfbcb0c5961907597a7d1148e3af036268f2b773886b8bb3eeb1e1281d3d3d6"
 "checksum darling_core 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)" = "ee54512bec54b41cf2337a22ddfadb53c7d4c738494dc2a186d7b037ad683b85"

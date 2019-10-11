@@ -20,6 +20,13 @@ $ curl -LO https://github.com/marcaddeo/cl/releases/download/0.4.0/cl_0.4.0_amd6
 $ sudo dpkg -i cl_0.4.0_amd64.deb
 ```
 
+### Linux
+```
+$ curl -LO https://github.com/marcaddeo/cl/releases/download/0.4.0/cl-0.4.0-x86_64-unknown-linux-musl.tar.gz
+$ tar czvf cl-0.4.0-x86_64-unknown-linux-musl.tar.gz
+$ sudo mv cl /usr/local/bin/cl
+```
+
 ### Cargo
 
 ```

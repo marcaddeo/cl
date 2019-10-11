@@ -1,0 +1,5 @@
+---
+- added: Add a build script to build releases for each target
+- fixed: "Fix error when piping the output of `cl`"
+- added: Add Linux (musl) installation instructions
+- changed: Update add entry functionality to also stage the change entry in the git index for committing

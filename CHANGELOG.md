@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add a build script to build releases for each target
+- Add Linux (musl) installation instructions
+
+### Changed
+- Update add entry functionality to also stage the change entry in the git index for committing
+
+### Fixed
+- Fix error when piping the output of `cl`
 
 ## [0.4.0] - 2019-10-11
 ### Added

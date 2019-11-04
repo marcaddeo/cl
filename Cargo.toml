@@ -1,6 +1,6 @@
 [package]
 name = "cl"
-version = "0.5.0"
+version = "0.6.0"
 description = "A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md"
 authors = ["Marc Addeo <hi@marc.cx>"]
 edition = "2018"

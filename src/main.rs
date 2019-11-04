@@ -217,8 +217,8 @@ fn get_cl_path() -> Result<PathBuf> {
     let head = head.shorthand().ok_or(ClError::CouldNotDetermineHead)?;
     let mut cl_path = get_cl_dir()?;
 
-    create_dir_all(cl_path.clone())?;
     cl_path.push(head);
+    create_dir_all(cl_path.clone())?;
     cl_path.set_extension("yml");
 
     Ok(cl_path)

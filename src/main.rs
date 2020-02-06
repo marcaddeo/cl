@@ -149,7 +149,7 @@ fn main() -> Result<()> {
                     if matches.is_present("no-headings") {
                         output = output.replace("## [Unreleased]\n", "");
                     }
-                    format!("{}", output.to_string().trim_end())
+                    format!("{}\n", output.to_string().trim_end())
                 }
                 _ => unreachable!(),
             };

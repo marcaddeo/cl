@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Ensure the output of `cl` always ends with a newline
+
 ## [0.6.0] - 2019-10-11
 ### Fixed
 - Fix bug that caused branch names with a directory separator to fail when

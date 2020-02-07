@@ -30,7 +30,7 @@ $ sudo mv cl /usr/local/bin/cl
 ### Cargo
 
 ```
-$ cargo install --git https://github.com/marcaddeo/cl
+$ cargo install cl
 ```
 
 ## Usage

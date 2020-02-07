@@ -16,14 +16,14 @@ $ brew install marcaddeo/clsuite/cl
 
 ## Debian
 ```
-$ curl -LO https://github.com/marcaddeo/cl/releases/download/0.6.0/cl_0.6.0_amd64.deb
-$ sudo dpkg -i cl_0.6.0_amd64.deb
+$ curl -LO https://github.com/marcaddeo/cl/releases/download/0.7.0/cl_0.7.0_amd64.deb
+$ sudo dpkg -i cl_0.7.0_amd64.deb
 ```
 
 ### Linux
 ```
-$ curl -LO https://github.com/marcaddeo/cl/releases/download/0.6.0/cl-0.6.0-x86_64-unknown-linux-musl.tar.gz
-$ tar czvf cl-0.6.0-x86_64-unknown-linux-musl.tar.gz
+$ curl -LO https://github.com/marcaddeo/cl/releases/download/0.7.0/cl-0.7.0-x86_64-unknown-linux-musl.tar.gz
+$ tar czvf cl-0.7.0-x86_64-unknown-linux-musl.tar.gz
 $ sudo mv cl /usr/local/bin/cl
 ```
 
@@ -35,7 +35,7 @@ $ cargo install --git https://github.com/marcaddeo/cl
 
 ## Usage
 ```
-cl 0.6.0
+cl 0.7.0
 Marc Addeo <hi@marc.cx>
 A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md
 

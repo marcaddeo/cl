@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.7.0] - 2020-02-07
+### Changed
+- Show all unreleased changes from CHANGELOG.md and the `.cl` directory when
+  running `cl` without a subcommand
+
 ### Fixed
 - Ensure the output of `cl` always ends with a newline
 
@@ -48,7 +54,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial implementation of `cl` binary
 
-[Unreleased]: https://github.com/marcaddeo/cl/compare/0.6.0...HEAD
+[Unreleased]: https://github.com/marcaddeo/cl/compare/0.7.0...HEAD
+[0.7.0]: https://github.com/marcaddeo/cl/compare/0.6.0...0.7.0
 [0.6.0]: https://github.com/marcaddeo/cl/compare/0.5.0...0.6.0
 [0.5.0]: https://github.com/marcaddeo/cl/compare/0.4.0...0.5.0
 [0.4.0]: https://github.com/marcaddeo/cl/compare/0.3.0...0.4.0

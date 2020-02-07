@@ -1,9 +1,21 @@
 [package]
 name = "cl"
-version = "0.6.0"
+version = "0.7.0"
 description = "A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md"
+keywords = ["changelog", "manager", "keepachangelog"]
+categories = ["command-line-utilities", "development-tools", "text-processing"]
+homepage = "https://github.com/marcaddeo/cl"
+repository = "https://github.com/marcaddeo/cl"
+documentation = "https://github.com/marcaddeo/cl#cl"
 authors = ["Marc Addeo <hi@marc.cx>"]
 edition = "2018"
+license = "MIT"
+edition = "2018"
+exclude = [
+    ".cl",
+    ".gitignore",
+    "scripts"
+]
 
 [dependencies]
 derive_builder = "0.8.0"

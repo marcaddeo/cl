@@ -3,6 +3,7 @@ use clap::{
     app_from_crate, crate_authors, crate_description, crate_name, crate_version, AppSettings, Arg,
     SubCommand,
 };
+use clparse::ChangelogParser;
 use clparse::changelog::{Change, ReleaseBuilder};
 use err_derive::Error;
 use scan_dir::ScanDir;
@@ -240,8 +241,15 @@ fn get_changes(cl_path: PathBuf) -> Result<Vec<Change>> {
     }
 }
 
+fn get_unreleased_changes() -> Result<Vec<Change>> {
+    let repo = git2::Repository::discover(".").map_err(ClError::RepositoryError)?;
+    let cl_path = PathBuf::from(repo.path()).with_file_name("CHANGELOG.md");
+
+    Ok(ChangelogParser::parse(cl_path)?.unreleased_changes())
+}
+
 fn get_all_changes() -> Result<Vec<Change>> {
-    let mut changes: Vec<Change> = Vec::new();
+    let mut changes: Vec<Change> = get_unreleased_changes()?;
     let mut logs: Vec<PathBuf> = Vec::new();
     let cl_dir = get_cl_dir()?;
 

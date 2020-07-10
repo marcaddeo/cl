@@ -146,14 +146,14 @@ fn main() -> Result<()> {
             let changes = get_all_changes()?;
             let output = match matches.value_of("format").unwrap() {
                 "json" => {
-                    format!("{}", serde_json::to_string_pretty(&changes)?)
+                    format!("{}\n", serde_json::to_string_pretty(&changes)?)
                 }
                 "yaml" | "yml" => {
                     let mut output = serde_yaml::to_string(&changes)?;
                     if matches.is_present("no-headings") {
                         output = output.replace("---\n", "");
                     }
-                    format!("{}", output.to_string().trim_end())
+                    format!("{}\n", output.to_string().trim_end())
                 }
                 "markdown" | "md" => {
                     let release = ReleaseBuilder::default()

@@ -14,7 +14,7 @@ way and avoid unnecessary merge conflicts.
 $ brew install marcaddeo/clsuite/cl
 ```
 
-## Debian
+### Debian
 ```
 $ curl -LO https://github.com/marcaddeo/cl/releases/download/0.8.0/cl_0.8.0_amd64.deb
 $ sudo dpkg -i cl_0.8.0_amd64.deb

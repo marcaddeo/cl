@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add a subcommand to yank a specific release
 
+### Fixed
+- Ensure all cl output formats end with a newline
+
 ## [0.7.0] - 2020-02-07
 ### Changed
 - Show all unreleased changes from CHANGELOG.md and the `.cl` directory when

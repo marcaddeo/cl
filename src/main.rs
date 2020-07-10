@@ -1,11 +1,12 @@
-use anyhow::Result;
+use anyhow::{bail, Result};
 use clap::{
     app_from_crate, crate_authors, crate_description, crate_name, crate_version, AppSettings, Arg,
     SubCommand,
 };
 use clparse::ChangelogParser;
-use clparse::changelog::{Change, ReleaseBuilder};
+use clparse::changelog::{Change, Changelog, ReleaseBuilder};
 use err_derive::Error;
+use semver::Version;
 use scan_dir::ScanDir;
 use std::env;
 use std::fs::{create_dir_all, OpenOptions};
@@ -22,6 +23,10 @@ enum ClError {
     ScanError(#[error(source)] Vec<scan_dir::Error>),
     #[error(display = "could not determine determine the repository root. are you in a git repo?")]
     RepositoryError(#[error(source)] git2::Error),
+    #[error(display = "invalid release version string: {}", _0)]
+    ReleaseStringError(#[error(source)] semver::SemVerError),
+    #[error(display = "could not find release {}", _0)]
+    ReleaseNotFound(String),
     #[error(display = "could not build release for output: {}", _0)]
     ErrorBuildingRelease(String),
     #[error(display = "could not determine the repository HEAD")]
@@ -124,6 +129,16 @@ fn main() -> Result<()> {
             SubCommand::with_name("edit")
                 .about("Opens the change file for direct editing")
         )
+        .subcommand(
+            SubCommand::with_name("yank")
+                .about("Mark a specific release as [YANKED]")
+                .arg(
+                    Arg::with_name("release")
+                        .help("The release to mark as [YANKED]")
+                        .value_name("RELEASE")
+                        .required(true)
+                )
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -170,6 +185,21 @@ fn main() -> Result<()> {
             };
 
             Command::new(editor).arg(cl_path).spawn()?.wait()?;
+
+            Ok(())
+        }
+        ("yank", Some(sub_matches)) => {
+            let version_arg = sub_matches.value_of("release").unwrap();
+            let version = Version::parse(version_arg)
+                .map_err(ClError::ReleaseStringError)?;
+            let mut changelog = get_changelog()?;
+
+            if let Some(release) = changelog.release_mut(version) {
+                release.yank(true);
+                std::fs::write(get_changelog_path()?, format!("{}", changelog))?;
+            } else {
+                bail!(ClError::ReleaseNotFound(version_arg.to_string()));
+            }
 
             Ok(())
         }
@@ -241,11 +271,17 @@ fn get_changes(cl_path: PathBuf) -> Result<Vec<Change>> {
     }
 }
 
-fn get_unreleased_changes() -> Result<Vec<Change>> {
+fn get_changelog_path() -> Result<PathBuf> {
     let repo = git2::Repository::discover(".").map_err(ClError::RepositoryError)?;
-    let cl_path = PathBuf::from(repo.path()).with_file_name("CHANGELOG.md");
+    Ok(PathBuf::from(repo.path()).with_file_name("CHANGELOG.md"))
+}
 
-    Ok(ChangelogParser::parse(cl_path)?.unreleased_changes())
+fn get_changelog() -> Result<Changelog> {
+    Ok(ChangelogParser::parse(get_changelog_path()?)?)
+}
+
+fn get_unreleased_changes() -> Result<Vec<Change>> {
+    Ok(get_changelog()?.unreleased_changes())
 }
 
 fn get_all_changes() -> Result<Vec<Change>> {

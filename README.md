@@ -30,7 +30,7 @@ $ sudo mv cl /usr/local/bin/cl
 ### Cargo
 
 ```
-$ cargo install --git https://github.com/marcaddeo/cl
+$ cargo install cl
 ```
 
 ## Usage
@@ -54,12 +54,12 @@ OPTIONS:
 SUBCOMMANDS:
     added         Creates a change entry to be placed in the Added section of the CHANGELOG [aliases: add]
     changed       Creates a change entry to be placed in the Changed section of the CHANGELOG [aliases: change]
-    deprecated    Creates a change entry to be placed in the Deprecated section of the CHANGELOG [aliases:
-                  deprecate]
+    deprecated    Creates a change entry to be placed in the Deprecated section of the CHANGELOG [aliases: deprecate]
     removed       Creates a change entry to be placed in the Removed section of the CHANGELOG [aliases: remove]
     fixed         Creates a change entry to be placed in the Fixed section of the CHANGELOG [aliases: fix]
     security      Creates a change entry to be placed in the Security section of the CHANGELOG
     edit          Opens the change file for direct editing
+    yank          Mark a specific release as [YANKED]
 ```
 
 ## Examples
@@ -122,3 +122,9 @@ your text editor using the `$VISUAL` and `$EDITOR` environment variables.
 ```
 $ cl edit
 ```
+
+### Yanking a release
+Sometimes a release doesn't go as plan after the fact, and needs to be yanked
+from history. To do so, simply type `cl yank 1.2.3` where `1.2.3` is the
+release you wish to yank. This will tag the release as `[YANKED]` and remove
+it's link from the CHANGELOG.

@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Add an aggregate subcommand to aggregate change entries into the CHANGELOG.md
+  file
+
+### Fixed
+- Fix bug that caused cl entries to be not properly nested in their branch
+  directories
 
 ## [0.8.0] - 2020-07-10
 ### Added

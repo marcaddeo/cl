@@ -60,6 +60,7 @@ SUBCOMMANDS:
     security      Creates a change entry to be placed in the Security section of the CHANGELOG
     edit          Opens the change file for direct editing
     yank          Mark a specific release as [YANKED]
+    aggregate     Aggregate change entries into the Unreleased section of the CHANGELOG
 ```
 
 ## Examples
@@ -128,3 +129,18 @@ Sometimes a release doesn't go as plan after the fact, and needs to be yanked
 from history. To do so, simply type `cl yank 1.2.3` where `1.2.3` is the
 release you wish to yank. This will tag the release as `[YANKED]` and remove
 it's link from the CHANGELOG.
+
+### Aggregating unreleased changes
+After you've made some changes and they've been merged, you'll likely want to
+aggregate your cl entries into the actual CHANGELOG.md file so they can be
+easily viewed by users. This can be achieved with the `aggregate` subcommand.
+
+```
+$ cl aggregate
+```
+
+This will take any change entries in the `.cl` directory, put them into the
+`CHANGELOG.md` file, and then remove them and any empty directories within the
+`.cl` directory.
+
+This command is useful to run via CI after a pull request has been merged.

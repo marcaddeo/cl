@@ -1,0 +1,2 @@
+---
+- fixed: Fix bug that caused cl entries to be not properly nested in their branch directories

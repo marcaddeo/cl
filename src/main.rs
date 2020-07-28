@@ -250,7 +250,7 @@ fn get_cl_path() -> Result<PathBuf> {
 
     cl_path.push(head);
     create_dir_all(cl_path.clone())?;
-    cl_path.set_extension("yml");
+    cl_path.push("changes.yml");
 
     Ok(cl_path)
 }

@@ -1,6 +1,6 @@
 [package]
 name = "cl"
-version = "0.8.0"
+version = "0.9.0"
 description = "A command line tool for recording changes to be collected for use in a Keep A Changelog formatted CHANGELOG.md"
 keywords = ["changelog", "manager", "keepachangelog"]
 categories = ["command-line-utilities", "development-tools", "text-processing"]

@@ -8,6 +8,8 @@ use clparse::changelog::{Change, Changelog, ReleaseBuilder};
 use err_derive::Error;
 use semver::Version;
 use scan_dir::ScanDir;
+use gag::Gag;
+use remove_empty_subdirs::remove_empty_subdirs;
 use std::env;
 use std::fs::{create_dir_all, OpenOptions};
 use std::io::{self, Write};
@@ -139,6 +141,10 @@ fn main() -> Result<()> {
                         .required(true)
                 )
         )
+        .subcommand(
+            SubCommand::with_name("aggregate")
+                .about("Aggregate change entries into the Unreleased section of the CHANGELOG")
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -199,6 +205,19 @@ fn main() -> Result<()> {
                 std::fs::write(get_changelog_path()?, format!("{}", changelog))?;
             } else {
                 bail!(ClError::ReleaseNotFound(version_arg.to_string()));
+            }
+
+            Ok(())
+        }
+        ("aggregate", Some(_)) => {
+            let mut changelog = get_changelog()?;
+
+            if let Some(unreleased) = changelog.unreleased_mut() {
+                unreleased.set_changes(get_all_changes()?);
+                std::fs::write(get_changelog_path()?, format!("{}", changelog))?;
+                remove_cl_change_entries()?;
+            } else {
+                bail!(ClError::ReleaseNotFound("Unreleased".to_string()));
             }
 
             Ok(())
@@ -284,8 +303,7 @@ fn get_unreleased_changes() -> Result<Vec<Change>> {
     Ok(get_changelog()?.unreleased_changes())
 }
 
-fn get_all_changes() -> Result<Vec<Change>> {
-    let mut changes: Vec<Change> = get_unreleased_changes()?;
+fn get_cl_entry_paths() -> Result<Vec<PathBuf>> {
     let mut logs: Vec<PathBuf> = Vec::new();
     let cl_dir = get_cl_dir()?;
 
@@ -301,6 +319,27 @@ fn get_all_changes() -> Result<Vec<Change>> {
             }
         })
         .map_err(ClError::ScanError)?;
+
+    Ok(logs)
+}
+
+fn remove_cl_change_entries() -> Result<()> {
+    let logs = get_cl_entry_paths()?;
+
+    for log in logs {
+        std::fs::remove_file(log)?;
+    }
+
+    let gag = Gag::stdout()?;
+    remove_empty_subdirs(get_cl_dir()?.as_path())?;
+    drop(gag);
+
+    Ok(())
+}
+
+fn get_all_changes() -> Result<Vec<Change>> {
+    let mut changes: Vec<Change> = get_unreleased_changes()?;
+    let logs = get_cl_entry_paths()?;
 
     for log in logs {
         let mut cl_changes = get_changes(log)?;

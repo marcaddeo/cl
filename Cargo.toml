@@ -20,7 +20,7 @@ exclude = [
 derive_builder = "0.8.0"
 clap = { version = "2.33.0", features = ["yaml", "suggestions", "color"] }
 scan_dir = "0.3.3"
-git2 = { version = "0.10.1", features = ["vendored-openssl"] }
+git2 = { version = "0.16.1", features = ["vendored-openssl"] }
 serde = "1.0.101"
 serde_yaml = "0.8.11"
 serde_json = "1.0.41"
